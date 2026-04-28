@@ -328,7 +328,7 @@ function Dashboard({ user }) {
   useEffect(() => { api('/dashboard').then(setData); }, []);
   if (!data) return <div style={{ color:'#64748b' }}>Loading dashboard...</div>;
 
-  const s = data.stats;
+  const s = data?.stats || {};
   const roleColor = { candidate:'#818cf8', corporate:'#34d399', educator:'#38bdf8', consultant:'#fbbf24' }[user.role];
 
   return (
