@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Talents — AI-Powered Talent Platform</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0f1e; color: #e2e8f0; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #1a1f3a; }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 3px; }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #38bdf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; backdrop-filter: blur(10px); }
+    .card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-2px); transition: all 0.3s; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border: none; padding: 10px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
+    .btn-secondary { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); padding: 10px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+    .btn-secondary:hover { background: rgba(99,102,241,0.25); }
+    .btn-green { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+    .btn-green:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+    .input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px; color: #e2e8f0; font-size: 14px; outline: none; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .select { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px; color: #e2e8f0; font-size: 14px; outline: none; cursor: pointer; }
+    .select option { background: #1a1f3a; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-blue { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .badge-green { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .badge-purple { background: rgba(139,92,246,0.2); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+    .badge-yellow { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-red { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+    .sidebar { background: rgba(255,255,255,0.03); border-right: 1px solid rgba(255,255,255,0.07); width: 240px; min-height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; z-index: 50; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; color: #94a3b8; transition: all 0.2s; margin-bottom: 4px; }
+    .nav-item:hover { background: rgba(99,102,241,0.1); color: #c7d2fe; }
+    .nav-item.active { background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); }
+    .main-content { margin-left: 240px; padding: 32px; min-height: 100vh; }
+    .match-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .match-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .chat-bubble { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; }
+    .chat-bot { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.2); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .chat-user { background: rgba(99,102,241,0.5); align-self: flex-end; border-bottom-right-radius: 4px; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation: fadeIn 0.4s ease; }
+    .stat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; }
+    .hero-bg { background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.1) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(52,211,153,0.08) 0%, transparent 50%); }
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; background: rgba(255,255,255,0.07); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); margin: 2px; }
+    .progress-ring { transform: rotate(-90deg); }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: center; justify-content: center; }
+    .modal { background: #1a1f3a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px; max-width: 480px; width: 90%; }
+    .skill-chip { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); margin: 3px; }
+    .toast { position: fixed; bottom: 30px; right: 30px; background: #1e293b; border: 1px solid rgba(99,102,241,0.4); border-radius: 12px; padding: 14px 20px; color: white; z-index: 999; animation: fadeIn 0.3s; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    label { display: block; font-size: 13px; font-weight: 500; color: #94a3b8; margin-bottom: 6px; }
+    .landing-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,15,30,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+const API = 'http://localhost:3000/api';
+
+// ===================== UTILS =====================
+function api(path, options = {}) {
+  const token = localStorage.getItem('gt_token');
+  return fetch(`${API}${path}`, {
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    ...options
+  }).then(r => r.json());
+}
+
+function Toast({ msg, onClose }) {
+  useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, []);
+  return <div className="toast">✅ {msg}</div>;
+}
+
+// ===================== LANDING PAGE =====================
+function LandingPage({ onLogin, onRegister }) {
+  const features = [
+    { icon: '🤖', title: 'AI Matching Engine', desc: 'Smart job & course recommendations based on your skills', color: '#818cf8' },
+    { icon: '🛡️', title: 'Trust Score System', desc: 'KYC verification & dynamic trust scoring for all users', color: '#34d399' },
+    { icon: '📊', title: 'Role-Based Dashboards', desc: 'Personalized dashboards for candidates, corporates & more', color: '#38bdf8' },
+    { icon: '🌐', title: 'Global Events', desc: 'Conclaves, hackathons & international talent exchanges', color: '#f59e0b' },
+    { icon: '💬', title: 'AI Chatbot', desc: 'Your 24/7 intelligent guide through the platform', color: '#ec4899' },
+    { icon: '📚', title: 'Learning Hub', desc: 'Courses tailored to fill your skill gaps automatically', color: '#a78bfa' },
+  ];
+  const roles = ['Candidates', 'Corporates', 'Educators', 'Consultants', 'Governments'];
+  const [roleIdx, setRoleIdx] = useState(0);
+  useEffect(() => { const t = setInterval(() => setRoleIdx(i => (i+1) % roles.length), 2000); return () => clearInterval(t); }, []);
+
+  return (
+    <div style={{ minHeight: '100vh' }} className="hero-bg">
+      <nav className="landing-nav">
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:36, height:36, background:'linear-gradient(135deg,#6366f1,#38bdf8)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>🌟</div>
+          <span style={{ fontWeight:800, fontSize:18 }}>Global <span className="gradient-text">Talents</span></span>
+        </div>
+        <div style={{ display:'flex', gap:12 }}>
+          <button className="btn-secondary" onClick={onLogin}>Sign In</button>
+          <button className="btn-primary" onClick={onRegister}>Join Free →</button>
+        </div>
+      </nav>
+
+      <div style={{ paddingTop:120, textAlign:'center', maxWidth:900, margin:'0 auto', padding:'120px 32px 80px' }}>
+        <div className="badge badge-purple" style={{ marginBottom:20, fontSize:13, padding:'6px 16px' }}>🚀 MIT ADT Internship Project 2025</div>
+        <h1 style={{ fontSize:64, fontWeight:900, lineHeight:1.1, marginBottom:24 }}>
+          The Future of<br /><span className="gradient-text">Global Talent</span>
+        </h1>
+        <p style={{ fontSize:20, color:'#94a3b8', marginBottom:16, maxWidth:600, margin:'0 auto 16px' }}>
+          AI-powered platform unifying talent acquisition, learning & global collaboration for
+        </p>
+        <div style={{ fontSize:28, fontWeight:700, color:'#818cf8', marginBottom:48, height:40 }}>
+          {roles[roleIdx]} ✦
+        </div>
+        <div style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap' }}>
+          <button className="btn-primary" style={{ padding:'14px 36px', fontSize:16 }} onClick={onRegister}>Get Started Free →</button>
+          <button className="btn-secondary" style={{ padding:'14px 36px', fontSize:16 }} onClick={onLogin}>Demo Login</button>
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20, marginTop:80 }}>
+          {features.map((f,i) => (
+            <div key={i} className="card fade-in" style={{ padding:28, textAlign:'left', animationDelay:`${i*0.1}s` }}>
+              <div style={{ fontSize:32, marginBottom:12 }}>{f.icon}</div>
+              <div style={{ fontWeight:700, fontSize:16, marginBottom:8, color:f.color }}>{f.title}</div>
+              <div style={{ fontSize:14, color:'#64748b', lineHeight:1.6 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display:'flex', gap:40, justifyContent:'center', marginTop:60 }}>
+          {[['10K+','Active Candidates'],['500+','Partner Companies'],['200+','Courses'],['50+','Countries']].map(([n,l]) => (
+            <div key={l} style={{ textAlign:'center' }}>
+              <div style={{ fontSize:36, fontWeight:900 }} className="gradient-text">{n}</div>
+              <div style={{ fontSize:13, color:'#64748b' }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===================== AUTH FORMS =====================
+function AuthPage({ mode, onSuccess, onToggle }) {
+  const [form, setForm] = useState({ name:'', email:'', password:'', role:'candidate', skills:'', location:'' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true); setError('');
+    try {
+      const body = mode === 'register'
+        ? { ...form, skills: form.skills.split(',').map(s => s.trim()).filter(Boolean) }
+        : { email: form.email, password: form.password };
+      const res = await api(`/auth/${mode}`, { method: 'POST', body: JSON.stringify(body) });
+      if (res.error) { setError(res.error); setLoading(false); return; }
+      localStorage.setItem('gt_token', res.token);
+      localStorage.setItem('gt_user', JSON.stringify(res.user));
+      onSuccess(res.user);
+    } catch(e) { setError('Connection failed. Make sure server is running.'); setLoading(false); }
+  };
+
+  return (
+    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20 }} className="hero-bg">
+      <div style={{ width:'100%', maxWidth:480 }}>
+        <div style={{ textAlign:'center', marginBottom:32 }}>
+          <div style={{ fontSize:40, marginBottom:12 }}>🌟</div>
+          <h2 style={{ fontSize:28, fontWeight:800, marginBottom:8 }}>
+            {mode === 'login' ? 'Welcome back' : 'Join Global Talents'}
+          </h2>
+          <p style={{ color:'#64748b', fontSize:14 }}>
+            {mode === 'login' ? 'Sign in to your account' : 'Create your free account today'}
+          </p>
+        </div>
+
+        <div className="card" style={{ padding:32 }}>
+          {mode === 'login' && (
+            <div className="card" style={{ padding:16, marginBottom:20, background:'rgba(99,102,241,0.1)' }}>
+              <p style={{ fontSize:13, color:'#818cf8', fontWeight:600 }}>🔑 Demo Credentials</p>
+              <p style={{ fontSize:12, color:'#64748b', marginTop:4 }}>Candidate: priya@email.com / pass123</p>
+              <p style={{ fontSize:12, color:'#64748b' }}>Corporate: hr@techcorp.com / pass123</p>
+              <p style={{ fontSize:12, color:'#64748b' }}>Educator: meera@edu.com / pass123</p>
+            </div>
+          )}
+
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            {mode === 'register' && (
+              <div>
+                <label>Full Name</label>
+                <input className="input" placeholder="Your full name" value={form.name} onChange={e => setForm({...form, name:e.target.value})} />
+              </div>
+            )}
+            <div>
+              <label>Email Address</label>
+              <input className="input" type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email:e.target.value})} />
+            </div>
+            <div>
+              <label>Password</label>
+              <input className="input" type="password" placeholder="••••••••" value={form.password} onChange={e => setForm({...form, password:e.target.value})} />
+            </div>
+            {mode === 'register' && (
+              <>
+                <div>
+                  <label>I am a...</label>
+                  <select className="select" value={form.role} onChange={e => setForm({...form, role:e.target.value})}>
+                    <option value="candidate">🎯 Candidate (Job Seeker)</option>
+                    <option value="corporate">🏢 Corporate (Employer)</option>
+                    <option value="educator">👩‍🏫 Educator / Trainer</option>
+                    <option value="consultant">💼 Consultant</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Skills (comma-separated)</label>
+                  <input className="input" placeholder="e.g. React, Python, Node.js" value={form.skills} onChange={e => setForm({...form, skills:e.target.value})} />
+                </div>
+                <div>
+                  <label>Location</label>
+                  <input className="input" placeholder="e.g. Mumbai, India" value={form.location} onChange={e => setForm({...form, location:e.target.value})} />
+                </div>
+              </>
+            )}
+          </div>
+
+          {error && <div style={{ color:'#f87171', fontSize:13, marginTop:12, padding:'10px 14px', background:'rgba(239,68,68,0.1)', borderRadius:8 }}>⚠️ {error}</div>}
+
+          <button className="btn-primary" style={{ width:'100%', marginTop:24, padding:14, fontSize:15 }} onClick={handleSubmit} disabled={loading}>
+            {loading ? '⏳ Please wait...' : mode === 'login' ? '🚀 Sign In' : '🎉 Create Account'}
+          </button>
+
+          <p style={{ textAlign:'center', marginTop:20, fontSize:14, color:'#64748b' }}>
+            {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
+            <span style={{ color:'#818cf8', cursor:'pointer', fontWeight:600 }} onClick={onToggle}>
+              {mode === 'login' ? 'Register →' : 'Sign In →'}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===================== SIDEBAR =====================
+function Sidebar({ user, active, setActive, onLogout }) {
+  const roleMenus = {
+    candidate: [
+      { id:'dashboard', icon:'📊', label:'Dashboard' },
+      { id:'ai-match', icon:'🤖', label:'AI Matches' },
+      { id:'jobs', icon:'💼', label:'Browse Jobs' },
+      { id:'courses', icon:'📚', label:'Courses' },
+      { id:'events', icon:'🌐', label:'Events' },
+      { id:'chatbot', icon:'💬', label:'AI Assistant' },
+      { id:'trust', icon:'🛡️', label:'Trust Score' },
+    ],
+    corporate: [
+      { id:'dashboard', icon:'📊', label:'Dashboard' },
+      { id:'jobs', icon:'💼', label:'Job Listings' },
+      { id:'talent', icon:'👥', label:'Talent Pool' },
+      { id:'events', icon:'🌐', label:'Events' },
+      { id:'chatbot', icon:'💬', label:'AI Assistant' },
+    ],
+    educator: [
+      { id:'dashboard', icon:'📊', label:'Dashboard' },
+      { id:'courses', icon:'📚', label:'Courses' },
+      { id:'events', icon:'🌐', label:'Events' },
+      { id:'chatbot', icon:'💬', label:'AI Assistant' },
+    ],
+    consultant: [
+      { id:'dashboard', icon:'📊', label:'Dashboard' },
+      { id:'jobs', icon:'💼', label:'Browse Jobs' },
+      { id:'events', icon:'🌐', label:'Events' },
+      { id:'chatbot', icon:'💬', label:'AI Assistant' },
+    ],
+  };
+  const menu = roleMenus[user.role] || roleMenus.candidate;
+  const roleColors = { candidate:'#818cf8', corporate:'#34d399', educator:'#38bdf8', consultant:'#fbbf24' };
+
+  return (
+    <div className="sidebar">
+      <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:32, paddingBottom:20, borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ width:36, height:36, background:'linear-gradient(135deg,#6366f1,#38bdf8)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🌟</div>
+        <div>
+          <div style={{ fontWeight:800, fontSize:15 }}>Global Talents</div>
+          <div style={{ fontSize:11, color:'#64748b' }}>AI Platform</div>
+        </div>
+      </div>
+
+      <div style={{ marginBottom:24, padding:14, background:'rgba(255,255,255,0.04)', borderRadius:12, border:'1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ width:40, height:40, background:`linear-gradient(135deg,${roleColors[user.role]},${roleColors[user.role]}88)`, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, marginBottom:8 }}>
+          {user.role === 'candidate' ? '🎯' : user.role === 'corporate' ? '🏢' : user.role === 'educator' ? '👩‍🏫' : '💼'}
+        </div>
+        <div style={{ fontWeight:700, fontSize:14, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{user.name}</div>
+        <div style={{ fontSize:11, marginTop:2 }}>
+          <span className="badge" style={{ background:`rgba(99,102,241,0.2)`, color:roleColors[user.role], border:`1px solid ${roleColors[user.role]}44`, fontSize:10, padding:'2px 8px' }}>
+            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+          </span>
+        </div>
+        <div style={{ marginTop:10, fontSize:12, color:'#64748b', display:'flex', alignItems:'center', gap:6 }}>
+          <span>🛡️ Trust Score:</span>
+          <span style={{ color:'#34d399', fontWeight:700 }}>{user.trustScore}%</span>
+        </div>
+      </div>
+
+      {menu.map(item => (
+        <div key={item.id} className={`nav-item ${active === item.id ? 'active' : ''}`} onClick={() => setActive(item.id)}>
+          <span style={{ fontSize:16 }}>{item.icon}</span>
+          <span>{item.label}</span>
+        </div>
+      ))}
+
+      <div style={{ position:'absolute', bottom:20, left:20, right:20 }}>
+        <div className="nav-item" onClick={onLogout} style={{ color:'#ef4444' }}>
+          <span>🚪</span><span>Sign Out</span>
+        </div>
+        <div style={{ fontSize:11, color:'#374151', textAlign:'center', marginTop:12 }}>MIT ADT Internship 2025</div>
+      </div>
+    </div>
+  );
+}
+
+// ===================== DASHBOARD =====================
+function Dashboard({ user }) {
+  const [data, setData] = useState(null);
+  useEffect(() => { api('/dashboard').then(setData); }, []);
+  if (!data) return <div style={{ color:'#64748b' }}>Loading dashboard...</div>;
+
+  const s = data.stats;
+  const roleColor = { candidate:'#818cf8', corporate:'#34d399', educator:'#38bdf8', consultant:'#fbbf24' }[user.role];
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:32 }}>
+        <h1 style={{ fontSize:28, fontWeight:800, marginBottom:4 }}>
+          Welcome back, <span style={{ color:roleColor }}>{user.name.split(' ')[0]}</span> 👋
+        </h1>
+        <p style={{ color:'#64748b', fontSize:15 }}>Here's your personalized overview powered by AI</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:20, marginBottom:32 }}>
+        {user.role === 'candidate' && <>
+          <StatCard icon="💼" label="Jobs Applied" value={s.jobsApplied} color="#818cf8" />
+          <StatCard icon="📚" label="Courses Enrolled" value={s.coursesEnrolled} color="#38bdf8" />
+          <StatCard icon="👁️" label="Profile Views" value={s.profileViews} color="#fbbf24" />
+          <StatCard icon="🛡️" label="Trust Score" value={`${s.trustScore}%`} color="#34d399" />
+        </>}
+        {user.role === 'corporate' && <>
+          <StatCard icon="📋" label="Jobs Posted" value={s.jobsPosted} color="#34d399" />
+          <StatCard icon="👥" label="Total Applicants" value={s.totalApplicants} color="#818cf8" />
+          <StatCard icon="✅" label="Active Listings" value={s.activeListings} color="#38bdf8" />
+          <StatCard icon="🛡️" label="Trust Score" value={`${s.trustScore}%`} color="#fbbf24" />
+        </>}
+        {(user.role === 'educator' || user.role === 'consultant') && <>
+          <StatCard icon="🛡️" label="Trust Score" value={`${s.trustScore}%`} color="#34d399" />
+          <StatCard icon="👁️" label="Profile Views" value={s.profileViews} color="#818cf8" />
+          <StatCard icon="🤝" label="Connections" value={s.connections} color="#38bdf8" />
+          <StatCard icon="⭐" label="Rating" value="4.8" color="#fbbf24" />
+        </>}
+      </div>
+
+      {user.role === 'candidate' && s.topMatchJob !== 'N/A' && (
+        <div className="card" style={{ padding:24, marginBottom:24, background:'linear-gradient(135deg,rgba(99,102,241,0.1),rgba(56,189,248,0.05))', borderColor:'rgba(99,102,241,0.3)' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+            <div style={{ fontSize:36 }}>🤖</div>
+            <div>
+              <div style={{ fontWeight:700, fontSize:16, color:'#818cf8' }}>AI Top Match for You</div>
+              <div style={{ fontSize:20, fontWeight:800, marginTop:4 }}>{s.topMatchJob}</div>
+              <div style={{ fontSize:14, color:'#34d399', marginTop:4, fontWeight:600 }}>{s.topMatchScore}% Match Score</div>
+            </div>
+            <div style={{ marginLeft:'auto' }}>
+              <div className="match-bar" style={{ width:120 }}>
+                <div className="match-fill" style={{ width:`${s.topMatchScore}%`, background:'linear-gradient(90deg,#6366f1,#38bdf8)' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="card" style={{ padding:24 }}>
+        <h3 style={{ fontWeight:700, marginBottom:16 }}>📈 Platform Activity</h3>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12 }}>
+          {[['8,240','Active Job Listings'],['1,180','Expert Courses'],['48','Live Events']].map(([n,l]) => (
+            <div key={l} style={{ textAlign:'center', padding:16, background:'rgba(255,255,255,0.03)', borderRadius:12 }}>
+              <div style={{ fontSize:28, fontWeight:900 }} className="gradient-text">{n}</div>
+              <div style={{ fontSize:12, color:'#64748b', marginTop:4 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ icon, label, value, color }) {
+  return (
+    <div className="stat-card" style={{ position:'relative', overflow:'hidden' }}>
+      <div style={{ position:'absolute', top:-10, right:-10, fontSize:50, opacity:0.06 }}>{icon}</div>
+      <div style={{ fontSize:28, marginBottom:8 }}>{icon}</div>
+      <div style={{ fontSize:30, fontWeight:900, color }}>{value}</div>
+      <div style={{ fontSize:13, color:'#64748b', marginTop:4 }}>{label}</div>
+    </div>
+  );
+}
+
+// ===================== AI MATCH =====================
+function AIMatch({ user }) {
+  const [data, setData] = useState(null);
+  useEffect(() => { api('/ai/matches').then(setData); }, []);
+  if (!data) return <div style={{ color:'#64748b', padding:40, textAlign:'center' }}>🤖 AI Engine analyzing your profile...</div>;
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:28 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>🤖 AI Matching Engine</h1>
+        <p style={{ color:'#64748b' }}>Personalized recommendations based on your skills & experience</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:24, marginBottom:28 }}>
+        <Section title="🎯 Top Job Matches" items={data.jobMatches} type="job" />
+        <Section title="📚 Recommended Courses" items={data.courseMatches} type="course" />
+      </div>
+
+      <div className="card" style={{ padding:24 }}>
+        <h3 style={{ fontWeight:700, marginBottom:16, fontSize:18 }}>🔍 Skill Gap Analysis</h3>
+        <p style={{ color:'#64748b', fontSize:14, marginBottom:16 }}>Skills you should learn to maximize your opportunities:</p>
+        <div style={{ display:'flex', flexWrap:'wrap', gap:10 }}>
+          {data.skillGaps.map((skill, i) => (
+            <div key={i} style={{ padding:'8px 16px', background:'rgba(239,68,68,0.1)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:20, fontSize:13, fontWeight:600, color:'#f87171', display:'flex', alignItems:'center', gap:6 }}>
+              ⚡ {skill} <span style={{ color:'#64748b', fontWeight:400 }}>— needed in {Math.floor(Math.random()*30+10)} jobs</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop:20, padding:16, background:'rgba(52,211,153,0.08)', border:'1px solid rgba(52,211,153,0.2)', borderRadius:12 }}>
+          <div style={{ color:'#34d399', fontWeight:700, marginBottom:4 }}>💡 AI Suggestion</div>
+          <div style={{ color:'#64748b', fontSize:14 }}>Learning these skills could increase your job match rate by an estimated <strong style={{ color:'#34d399' }}>40-60%</strong></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Section({ title, items, type }) {
+  return (
+    <div className="card" style={{ padding:24 }}>
+      <h3 style={{ fontWeight:700, marginBottom:16 }}>{title}</h3>
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ padding:14, background:'rgba(255,255,255,0.03)', borderRadius:12, border:'1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+              <div style={{ fontWeight:600, fontSize:14 }}>{item.title}</div>
+              <div style={{ fontSize:12, fontWeight:700, color: item.matchScore > 70 ? '#34d399' : item.matchScore > 40 ? '#fbbf24' : '#f87171', background: item.matchScore > 70 ? 'rgba(52,211,153,0.1)' : 'rgba(245,158,11,0.1)', padding:'2px 8px', borderRadius:20 }}>
+                {item.matchScore}% match
+              </div>
+            </div>
+            <div style={{ color:'#64748b', fontSize:12 }}>
+              {type === 'job' ? `${item.company} • ${item.salary}` : `${item.instructor} • ${item.duration}`}
+            </div>
+            <div className="match-bar" style={{ marginTop:8 }}>
+              <div className="match-fill" style={{ width:`${item.matchScore}%`, background: item.matchScore > 70 ? 'linear-gradient(90deg,#10b981,#34d399)' : 'linear-gradient(90deg,#f59e0b,#fbbf24)' }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===================== JOBS =====================
+function Jobs({ user }) {
+  const [jobs, setJobs] = useState([]);
+  const [toast, setToast] = useState('');
+  const [filter, setFilter] = useState('all');
+  const [showPost, setShowPost] = useState(false);
+  const [newJob, setNewJob] = useState({ title:'', company:'', location:'', salary:'', type:'Full-time', skills:'' });
+
+  useEffect(() => { api('/jobs').then(setJobs); }, []);
+
+  const apply = async (jobId) => {
+    const res = await api(`/jobs/apply/${jobId}`, { method:'POST' });
+    if (res.message) { setToast(res.message); setJobs(j => j.map(x => x.id === jobId ? {...x, applied:true} : x)); }
+    else setToast(res.error);
+  };
+
+  const postJob = async () => {
+    const body = { ...newJob, skills: newJob.skills.split(',').map(s => s.trim()) };
+    const res = await api('/jobs', { method:'POST', body: JSON.stringify(body) });
+    if (res.message) { setToast(res.message); setShowPost(false); api('/jobs').then(setJobs); }
+  };
+
+  const filtered = filter === 'all' ? jobs : jobs.filter(j => j.type.toLowerCase().includes(filter));
+
+  return (
+    <div className="fade-in">
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:28 }}>
+        <div>
+          <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>💼 {user.role === 'corporate' ? 'Manage Jobs' : 'Browse Jobs'}</h1>
+          <p style={{ color:'#64748b' }}>{jobs.length} opportunities, sorted by AI match score</p>
+        </div>
+        {user.role === 'corporate' && (
+          <button className="btn-primary" onClick={() => setShowPost(true)}>+ Post New Job</button>
+        )}
+      </div>
+
+      <div style={{ display:'flex', gap:10, marginBottom:24, flexWrap:'wrap' }}>
+        {['all','full-time','freelance','remote'].map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={{ padding:'8px 20px', borderRadius:20, border:'1px solid rgba(255,255,255,0.1)', background: filter===f ? '#6366f1' : 'rgba(255,255,255,0.04)', color: filter===f ? 'white' : '#94a3b8', cursor:'pointer', fontWeight:600, fontSize:13, textTransform:'capitalize' }}>
+            {f === 'all' ? 'All Jobs' : f}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:20 }}>
+        {filtered.map(job => (
+          <div key={job.id} className="card fade-in" style={{ padding:24 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:12 }}>
+              <div>
+                <div style={{ fontWeight:700, fontSize:16, marginBottom:4 }}>{job.title}</div>
+                <div style={{ color:'#64748b', fontSize:13 }}>🏢 {job.company}</div>
+              </div>
+              {user.role === 'candidate' && (
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ fontSize:20, fontWeight:800, color: job.matchScore > 70 ? '#34d399' : job.matchScore > 40 ? '#fbbf24' : '#f87171' }}>
+                    {job.matchScore}%
+                  </div>
+                  <div style={{ fontSize:11, color:'#64748b' }}>match</div>
+                </div>
+              )}
+            </div>
+
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:12 }}>
+              <span className="badge badge-blue">📍 {job.location}</span>
+              <span className="badge badge-purple">{job.type}</span>
+              <span className="badge badge-green">💰 {job.salary}</span>
+            </div>
+
+            <div style={{ marginBottom:14 }}>
+              {job.skills.map(s => <span key={s} className="skill-chip">{s}</span>)}
+            </div>
+
+            {user.role === 'candidate' && (
+              <>
+                <div className="match-bar" style={{ marginBottom:12 }}>
+                  <div className="match-fill" style={{ width:`${job.matchScore}%`, background:'linear-gradient(90deg,#6366f1,#38bdf8)' }} />
+                </div>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <span style={{ fontSize:12, color:'#64748b' }}>👥 {job.applicants} applicants</span>
+                  <button className={job.applied ? 'btn-secondary' : 'btn-green'} onClick={() => !job.applied && apply(job.id)} disabled={job.applied}>
+                    {job.applied ? '✅ Applied' : '🚀 Apply Now'}
+                  </button>
+                </div>
+              </>
+            )}
+            {user.role !== 'candidate' && (
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ fontSize:12, color:'#64748b' }}>👥 {job.applicants} applicants</span>
+                <span className="badge badge-green">Active</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {showPost && (
+        <div className="overlay" onClick={() => setShowPost(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h2 style={{ fontWeight:800, marginBottom:20 }}>📋 Post New Job</h2>
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              {[['Job Title','title','e.g. Senior React Developer'],['Company Name','company',''],['Location','location','e.g. Mumbai (Remote)'],['Salary Range','salary','e.g. ₹8-12 LPA'],['Required Skills','skills','comma-separated']].map(([l,k,p]) => (
+                <div key={k}>
+                  <label>{l}</label>
+                  <input className="input" placeholder={p} value={newJob[k]} onChange={e => setNewJob({...newJob, [k]:e.target.value})} />
+                </div>
+              ))}
+              <div>
+                <label>Job Type</label>
+                <select className="select" value={newJob.type} onChange={e => setNewJob({...newJob, type:e.target.value})}>
+                  <option>Full-time</option><option>Freelance</option><option>Part-time</option><option>Contract</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display:'flex', gap:12, marginTop:24 }}>
+              <button className="btn-primary" style={{ flex:1 }} onClick={postJob}>Post Job</button>
+              <button className="btn-secondary" style={{ flex:1 }} onClick={() => setShowPost(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toast && <Toast msg={toast} onClose={() => setToast('')} />}
+    </div>
+  );
+}
+
+// ===================== COURSES =====================
+function Courses() {
+  const [courses, setCourses] = useState([]);
+  const [toast, setToast] = useState('');
+
+  useEffect(() => { api('/courses').then(setCourses); }, []);
+
+  const enroll = async (courseId) => {
+    const res = await api(`/courses/enroll/${courseId}`, { method:'POST' });
+    if (res.message) { setToast(res.message); setCourses(c => c.map(x => x.id === courseId ? {...x, enrolled:true} : x)); }
+    else setToast(res.error);
+  };
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:28 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>📚 Learning Hub</h1>
+        <p style={{ color:'#64748b' }}>AI-curated courses based on your skill gaps</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:20 }}>
+        {courses.map(course => (
+          <div key={course.id} className="card fade-in" style={{ padding:24 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:12 }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontWeight:700, fontSize:15, marginBottom:4, lineHeight:1.4 }}>{course.title}</div>
+                <div style={{ fontSize:13, color:'#64748b' }}>👨‍🏫 {course.instructor}</div>
+              </div>
+              <div style={{ textAlign:'right', minWidth:60 }}>
+                <div style={{ fontSize:18, fontWeight:800, color:'#818cf8' }}>{course.matchScore}%</div>
+                <div style={{ fontSize:11, color:'#64748b' }}>match</div>
+              </div>
+            </div>
+
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:12 }}>
+              <span className="badge badge-blue">⏱️ {course.duration}</span>
+              <span className="badge badge-purple">{course.level}</span>
+              <span className="badge badge-yellow">⭐ {course.rating}</span>
+            </div>
+
+            <div style={{ marginBottom:14 }}>
+              {course.skills.map(s => <span key={s} className="skill-chip">{s}</span>)}
+            </div>
+
+            <div className="match-bar" style={{ marginBottom:14 }}>
+              <div className="match-fill" style={{ width:`${course.matchScore}%`, background:'linear-gradient(90deg,#6366f1,#a78bfa)' }} />
+            </div>
+
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div>
+                <div style={{ fontWeight:700, color:'#34d399', fontSize:16 }}>{course.price}</div>
+                <div style={{ fontSize:11, color:'#64748b' }}>{course.enrolled.toLocaleString()} enrolled</div>
+              </div>
+              <button className={course.enrolled ? 'btn-secondary' : 'btn-primary'} onClick={() => !course.enrolled && enroll(course.id)} disabled={course.enrolled}>
+                {course.enrolled ? '✅ Enrolled' : '📚 Enroll Now'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {toast && <Toast msg={toast} onClose={() => setToast('')} />}
+    </div>
+  );
+}
+
+// ===================== EVENTS =====================
+function Events() {
+  const [events, setEvents] = useState([]);
+  const [toast, setToast] = useState('');
+
+  useEffect(() => { api('/events').then(setEvents); }, []);
+
+  const typeColor = { Conference:'#818cf8', Hackathon:'#f87171', 'Hiring Fair':'#34d399', Webinar:'#38bdf8', 'Exchange Program':'#fbbf24' };
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:28 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>🌐 Events & Networking</h1>
+        <p style={{ color:'#64748b' }}>Global events, hackathons & talent exchanges</p>
+      </div>
+
+      <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+        {events.map(event => (
+          <div key={event.id} className="card fade-in" style={{ padding:28 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', gap:20 }}>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:10 }}>
+                  <span className="badge" style={{ background: `rgba(${typeColor[event.type] === '#818cf8' ? '129,140,248' : '52,211,153'},0.15)`, color: typeColor[event.type] || '#818cf8', border:`1px solid ${typeColor[event.type] || '#818cf8'}44` }}>
+                    {event.type}
+                  </span>
+                </div>
+                <div style={{ fontWeight:700, fontSize:20, marginBottom:8 }}>{event.title}</div>
+                <p style={{ color:'#64748b', fontSize:14, lineHeight:1.6, marginBottom:12 }}>{event.description}</p>
+                <div style={{ display:'flex', gap:16, fontSize:13 }}>
+                  <span style={{ color:'#94a3b8' }}>📅 {new Date(event.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}</span>
+                  <span style={{ color:'#94a3b8' }}>📍 {event.location}</span>
+                  <span style={{ color:'#94a3b8' }}>👥 {event.attendees.toLocaleString()} attendees</span>
+                </div>
+                <div style={{ marginTop:12 }}>
+                  {event.tags.map(t => <span key={t} className="tag">{t}</span>)}
+                </div>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:10, alignItems:'flex-end', justifyContent:'center' }}>
+                <button className="btn-primary" onClick={() => setToast(`Registered for ${event.title}!`)}>Register →</button>
+                <span style={{ fontSize:12, color:'#64748b' }}>by {event.organizer}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {toast && <Toast msg={toast} onClose={() => setToast('')} />}
+    </div>
+  );
+}
+
+// ===================== CHATBOT =====================
+function Chatbot({ user }) {
+  const [msgs, setMsgs] = useState([
+    { role:'bot', text:`👋 Hi ${user.name.split(' ')[0]}! I'm your Global Talents AI Assistant. I can help you find jobs, courses, events, and more. What would you like to explore today?` }
+  ]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+  const quickReplies = ['🔍 Find matching jobs', '📚 Recommend courses', '🌐 Upcoming events', '🛡️ Improve trust score', '💰 Salary insights'];
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior:'smooth' }); }, [msgs]);
+
+  const send = async (msg) => {
+    const text = msg || input.trim();
+    if (!text) return;
+    setInput('');
+    setMsgs(m => [...m, { role:'user', text }]);
+    setLoading(true);
+    try {
+      const res = await api('/chatbot', { method:'POST', body: JSON.stringify({ message: text }) });
+      setMsgs(m => [...m, { role:'bot', text: res.response }]);
+    } catch { setMsgs(m => [...m, { role:'bot', text:'⚠️ Connection error. Please make sure the server is running.' }]); }
+    setLoading(false);
+  };
+
+  return (
+    <div className="fade-in" style={{ height:'calc(100vh - 120px)', display:'flex', flexDirection:'column' }}>
+      <div style={{ marginBottom:20 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>💬 AI Assistant</h1>
+        <p style={{ color:'#64748b' }}>Your intelligent guide — available 24/7</p>
+      </div>
+
+      <div className="card" style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden', padding:0 }}>
+        <div style={{ padding:'16px 24px', borderBottom:'1px solid rgba(255,255,255,0.07)', display:'flex', alignItems:'center', gap:12 }}>
+          <div style={{ width:40, height:40, background:'linear-gradient(135deg,#6366f1,#38bdf8)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>🤖</div>
+          <div>
+            <div style={{ fontWeight:700 }}>Global Talents AI</div>
+            <div style={{ fontSize:12, color:'#34d399', display:'flex', alignItems:'center', gap:4 }}>
+              <span style={{ width:6, height:6, background:'#34d399', borderRadius:'50%', display:'inline-block' }} className="pulse"></span>
+              Online
+            </div>
+          </div>
+        </div>
+
+        <div style={{ flex:1, overflowY:'auto', padding:'20px 24px', display:'flex', flexDirection:'column', gap:16 }}>
+          {msgs.map((m, i) => (
+            <div key={i} style={{ display:'flex', flexDirection:'column', alignItems: m.role === 'bot' ? 'flex-start' : 'flex-end' }}>
+              <div className={`chat-bubble ${m.role === 'bot' ? 'chat-bot' : 'chat-user'}`}>{m.text}</div>
+            </div>
+          ))}
+          {loading && (
+            <div style={{ display:'flex', alignItems:'flex-start' }}>
+              <div className="chat-bubble chat-bot">
+                <span className="pulse">🤖 Thinking...</span>
+              </div>
+            </div>
+          )}
+          <div ref={bottomRef} />
+        </div>
+
+        <div style={{ padding:'12px 24px', borderTop:'1px solid rgba(255,255,255,0.07)' }}>
+          <div style={{ display:'flex', gap:8, marginBottom:12, flexWrap:'wrap' }}>
+            {quickReplies.map(q => (
+              <button key={q} onClick={() => send(q)} style={{ padding:'6px 14px', borderRadius:20, border:'1px solid rgba(99,102,241,0.3)', background:'rgba(99,102,241,0.1)', color:'#818cf8', cursor:'pointer', fontSize:12, fontWeight:500 }}>
+                {q}
+              </button>
+            ))}
+          </div>
+          <div style={{ display:'flex', gap:10 }}>
+            <input className="input" placeholder="Ask me anything..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} style={{ flex:1 }} />
+            <button className="btn-primary" onClick={() => send()} disabled={!input.trim() || loading} style={{ padding:'12px 20px' }}>Send ↗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===================== TRUST SCORE =====================
+function TrustScore({ user }) {
+  const score = user.trustScore || 75;
+  const metrics = [
+    { label:'Profile Completion', value: 78, icon:'📝' },
+    { label:'Identity Verified', value: user.verified ? 100 : 0, icon:'🪪' },
+    { label:'Employer Ratings', value: 85, icon:'⭐' },
+    { label:'Platform Activity', value: 70, icon:'📊' },
+    { label:'Certification Score', value: 60, icon:'🏆' },
+  ];
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:28 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>🛡️ Trust & Verification</h1>
+        <p style={{ color:'#64748b' }}>Build credibility across the platform</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'300px 1fr', gap:24 }}>
+        <div className="card" style={{ padding:32, display:'flex', flexDirection:'column', alignItems:'center' }}>
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="14"/>
+            <circle cx="70" cy="70" r="60" fill="none" stroke="url(#grad)" strokeWidth="14"
+              strokeDasharray={`${score * 3.77} 1000`} strokeLinecap="round" className="progress-ring"/>
+            <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#34d399"/>
+            </linearGradient></defs>
+            <text x="70" y="68" textAnchor="middle" fill="white" fontSize="28" fontWeight="900">{score}</text>
+            <text x="70" y="86" textAnchor="middle" fill="#64748b" fontSize="11">Trust Score</text>
+          </svg>
+
+          <div style={{ textAlign:'center', marginTop:16 }}>
+            <div style={{ fontWeight:700, fontSize:18, color: score > 85 ? '#34d399' : score > 70 ? '#fbbf24' : '#f87171' }}>
+              {score > 85 ? '⭐ Excellent' : score > 70 ? '✅ Good' : '⚠️ Needs Improvement'}
+            </div>
+            <p style={{ fontSize:13, color:'#64748b', marginTop:8 }}>
+              {user.verified ? '✅ KYC Verified' : '⚠️ KYC Pending'}
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+          {metrics.map((m, i) => (
+            <div key={i} className="card" style={{ padding:20 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:10 }}>
+                <div style={{ fontWeight:600 }}>{m.icon} {m.label}</div>
+                <div style={{ fontWeight:700, color: m.value >= 80 ? '#34d399' : m.value >= 60 ? '#fbbf24' : '#f87171' }}>{m.value}%</div>
+              </div>
+              <div className="match-bar">
+                <div className="match-fill" style={{ width:`${m.value}%`, background: m.value >= 80 ? 'linear-gradient(90deg,#10b981,#34d399)' : m.value >= 60 ? 'linear-gradient(90deg,#f59e0b,#fbbf24)' : 'linear-gradient(90deg,#ef4444,#f87171)' }} />
+              </div>
+            </div>
+          ))}
+
+          <div className="card" style={{ padding:20, background:'rgba(99,102,241,0.08)', borderColor:'rgba(99,102,241,0.3)' }}>
+            <div style={{ fontWeight:700, marginBottom:12, color:'#818cf8' }}>💡 How to improve your score</div>
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              {['Complete KYC verification (+15 pts)','Add certifications & achievements (+10 pts)','Get rated by employers (+8 pts per review)','Stay active on the platform (+5 pts/month)'].map((tip, i) => (
+                <div key={i} style={{ fontSize:13, color:'#94a3b8', display:'flex', gap:8 }}>
+                  <span style={{ color:'#6366f1' }}>→</span>{tip}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===================== TALENT POOL =====================
+function TalentPool() {
+  const [talent, setTalent] = useState([]);
+  useEffect(() => { api('/talent').then(setTalent).catch(() => setTalent([])); }, []);
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom:28 }}>
+        <h1 style={{ fontSize:26, fontWeight:800, marginBottom:4 }}>👥 Talent Pool</h1>
+        <p style={{ color:'#64748b' }}>AI-matched candidates for your requirements</p>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:20 }}>
+        {talent.map(t => (
+          <div key={t.id} className="card fade-in" style={{ padding:24 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:12 }}>
+              <div>
+                <div style={{ fontWeight:700, fontSize:16 }}>{t.name}</div>
+                <div style={{ fontSize:13, color:'#64748b' }}>📍 {t.location || 'Remote'}</div>
+              </div>
+              <div style={{ textAlign:'right' }}>
+                <div style={{ fontWeight:700, color:'#34d399', fontSize:18 }}>{t.trustScore}%</div>
+                <div style={{ fontSize:11, color:'#64748b' }}>trust score</div>
+              </div>
+            </div>
+            <div style={{ marginBottom:12 }}>
+              {(t.skills || []).map(s => <span key={s} className="skill-chip">{s}</span>)}
+            </div>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <span className="badge badge-green">{t.verified ? '✅ Verified' : '⏳ Pending'}</span>
+              <button className="btn-primary" style={{ padding:'8px 16px' }}>View Profile →</button>
+            </div>
+          </div>
+        ))}
+        {talent.length === 0 && <div style={{ color:'#64748b', padding:40 }}>Loading talent data...</div>}
+      </div>
+    </div>
+  );
+}
+
+// ===================== MAIN APP =====================
+function App() {
+  const [page, setPage] = useState('landing');
+  const [authMode, setAuthMode] = useState('login');
+  const [user, setUser] = useState(null);
+  const [active, setActive] = useState('dashboard');
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('gt_user');
+    const token = localStorage.getItem('gt_token');
+    if (savedUser && token) {
+      setUser(JSON.parse(savedUser));
+      setPage('app');
+    }
+  }, []);
+
+  const handleLogin = (u) => { setUser(u); setPage('app'); setActive('dashboard'); };
+  const handleLogout = () => { localStorage.removeItem('gt_token'); localStorage.removeItem('gt_user'); setUser(null); setPage('landing'); };
+
+  if (page === 'landing') return <LandingPage onLogin={() => { setAuthMode('login'); setPage('auth'); }} onRegister={() => { setAuthMode('register'); setPage('auth'); }} />;
+  if (page === 'auth') return <AuthPage mode={authMode} onSuccess={handleLogin} onToggle={() => setAuthMode(m => m === 'login' ? 'register' : 'login')} />;
+
+  const renderPage = () => {
+    switch(active) {
+      case 'dashboard': return <Dashboard user={user} />;
+      case 'ai-match': return <AIMatch user={user} />;
+      case 'jobs': return <Jobs user={user} />;
+      case 'courses': return <Courses />;
+      case 'events': return <Events />;
+      case 'chatbot': return <Chatbot user={user} />;
+      case 'trust': return <TrustScore user={user} />;
+      case 'talent': return <TalentPool />;
+      default: return <Dashboard user={user} />;
+    }
+  };
+
+  return (
+    <div>
+      <Sidebar user={user} active={active} setActive={setActive} onLogout={handleLogout} />
+      <div className="main-content">
+        {renderPage()}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
