@@ -15,7 +15,6 @@
 ![Express](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-Auth-FB015B?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 ![Status](https://img.shields.io/badge/status-Live-brightgreen?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 
 <br/>
 
@@ -627,111 +626,6 @@ Response:
 GET /api/health
 → { "status": "OK", "platform": "Global Talents", "version": "1.0.0" }
 ```
-
----
-
-## 🚀 Deployment Guide
-
-### Step 1 — Prepare Files
-
-Create `.gitignore`:
-```
-node_modules/
-.env
-*.log
-```
-
-Update `package.json`:
-```json
-{
-  "scripts": {
-    "start": "node server.js"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  }
-}
-```
-
-### Step 2 — Push to GitHub
-
-```bash
-git init
-git add .
-git commit -m "Global Talents Platform — Internship Project 2025"
-git branch -M main
-git remote add origin https://github.com/yourusername/global-talents.git
-git push -u origin main
-```
-
-### Step 3 — Deploy on Render (Free, No Credit Card)
-
-```
-1. Go to https://render.com
-2. Sign up with your GitHub account
-3. Click "New +" → "Web Service"
-4. Select your "global-talents" repository
-5. Configure settings:
-   Name:           global-talents-platform
-   Environment:    Node
-   Build Command:  npm install
-   Start Command:  node server.js
-   Instance Type:  Free
-
-6. Add Environment Variables:
-   JWT_SECRET = global-talents-secret-2025
-   NODE_ENV   = production
-   PORT       = 3000
-
-7. Click "Create Web Service"
-8. Wait 3–5 minutes
-9. Your app is live at: https://global-talents-platform.onrender.com
-```
-
-> 💡 Render free tier may sleep after 15 minutes of inactivity — first load takes ~30 seconds.
-
-### Step 4 — Share Your Live Link
-
-```
-https://global-talents-platform.onrender.com
-```
-
-Test all demo accounts still work on the live URL!
-
----
-
-## 📄 Research Foundation
-
-This platform is backed by a research paper analyzing the global talent gap and proposing a unified digital solution.
-
-**Key Research Findings:**
-- 40% of employers globally report difficulty finding skilled candidates *(LinkedIn Global Talent Trends, 2024)*
-- Talent platforms with AI matching show 3x better placement rates
-- Multi-role platforms reduce time-to-hire by 35%
-- Trust verification increases employer confidence by 60%
-
-**Platform Modules (from Research Paper):**
-1. Multi-Role Registration & KYC Verification
-2. AI-Driven Job & Course Matching Engine
-3. Trust Score & Credibility System
-4. Role-Based Personalized Dashboards
-5. Global Events & Networking Hub
-6. AI Chatbot Navigation Assistant
-
----
-
-## 👥 Team
-
-**Project Title**: Global Talents — AI-Powered Unified Talent Platform
-**Institution**: MIT School of Computing, MIT ADT University, Pune
-**Organization**: Innobytes — Erfinden Technologies Pvt. Ltd.
-**Duration**: Summer Internship 2025
-
-| Name | Enrollment No. | Role |
-|------|---------------|------|
-| Priyadarshini Wani | ADT23SOCB0804 | Backend Developer & Project Lead |
-| Ritisha Bobde | ADT23SOCB0855 | Frontend Developer |
-| Saanvi Dhote | ADT23SOCB0905 | UI/UX Designer & Documentation |
 
 ---
 
